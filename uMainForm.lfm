@@ -1,0 +1,35 @@
+object MainForm: TMainForm
+  Left = 735
+  Height = 659
+  Top = 182
+  Width = 781
+  Align = alClient
+  Caption = 'Custom Resource Browser'
+  ClientHeight = 659
+  ClientWidth = 781
+  Color = clBtnFace
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  OnCloseQuery = FormCloseQuery
+  OnCreate = FormCreate
+  OnShow = FormShow
+  Position = poScreenCenter
+  LCLVersion = '3.4.0.0'
+  object ChromiumWindow1: TChromiumWindow
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 0
+    Height = 659
+    Top = 0
+    Width = 781
+    Align = alClient
+    TabOrder = 0
+    OnClose = ChromiumWindow1Close
+    OnBeforeClose = ChromiumWindow1BeforeClose
+  end
+end
