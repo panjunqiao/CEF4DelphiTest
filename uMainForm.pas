@@ -155,9 +155,10 @@ begin
   try
     try
       //WriteLn(GetCurrentDir +url);
-      p:=Pos(url, '?');
+      p:=Pos('?',url);
       if p>0 then Delete(url,p,1000);
-      ShowMessage(url);
+      //ShowMessage(url);
+      OutputDebugString(PChar(url));
       FileStream:=TFileStream.Create(GetCurrentDir +url, fmOpenread);
       Result     := TCustomResourceHandler.Create(browser, frame, '', request, TStream(FileStream), CefGetMimeType('html'));
     except
