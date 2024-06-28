@@ -4,7 +4,7 @@
     <PathDelim Value="\"/>
     <Version Value="12"/>
     <BuildModes Active="Default"/>
-    <Units Count="5">
+    <Units Count="4">
       <Unit0>
         <Filename Value="crbrowser.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -21,8 +21,7 @@
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="150"/>
-        <CursorPos X="23" Y="158"/>
+        <CursorPos X="17" Y="15"/>
         <UsageCount Value="25"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -35,8 +34,12 @@
         <UsageCount Value="25"/>
         <Loaded Value="True"/>
       </Unit2>
+      <Unit3>
+        <Filename Value=""/>
+        <UsageCount Value="10"/>
+      </Unit3>
     </Units>
-    <JumpHistory Count="21" HistoryIndex="20">
+    <JumpHistory Count="22" HistoryIndex="21">
       <Position1>
         <Filename Value="uMainForm.pas"/>
         <Caret Line="32" Column="25" TopLine="7"/>
@@ -121,6 +124,10 @@
         <Filename Value="uMainForm.pas"/>
         <Caret Line="158" Column="23" TopLine="141"/>
       </Position21>
+      <Position22>
+        <Filename Value="uMainForm.pas"/>
+        <Caret Line="146" Column="62" TopLine="130"/>
+      </Position22>
     </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>
