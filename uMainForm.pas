@@ -1,6 +1,6 @@
 unit uMainForm;
 
-{$I C:\Users\panju\Documents\Lazarus\CEF4Delphi\source\cef.inc}
+{$I cef.inc}
 
 interface
 
@@ -137,6 +137,7 @@ var
   TempStream : TStringStream;
   url:string;
   FileStream:TFileStream;
+  p: Integer;
 begin
   // This event is called from the IO thread. Use mutexes if necessary.
   TempStream := nil;
@@ -153,6 +154,10 @@ begin
     end;
   try
     try
+      //WriteLn(GetCurrentDir +url);
+      p:=Pos(url, '?');
+      if p>0 then Delete(url,p,1000);
+      ShowMessage(url);
       FileStream:=TFileStream.Create(GetCurrentDir +url, fmOpenread);
       Result     := TCustomResourceHandler.Create(browser, frame, '', request, TStream(FileStream), CefGetMimeType('html'));
     except

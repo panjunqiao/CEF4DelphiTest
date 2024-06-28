@@ -8,10 +8,9 @@
       <Unit0>
         <Filename Value="crbrowser.lpr"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <TopLine Value="3"/>
-        <CursorPos X="22" Y="36"/>
-        <UsageCount Value="23"/>
+        <CursorPos Y="37"/>
+        <UsageCount Value="25"/>
         <Loaded Value="True"/>
       </Unit0>
       <Unit1>
@@ -20,10 +19,11 @@
         <ComponentName Value="MainForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="53"/>
-        <CursorPos X="5" Y="144"/>
-        <UsageCount Value="23"/>
+        <TopLine Value="139"/>
+        <CursorPos Y="160"/>
+        <UsageCount Value="25"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit1>
@@ -31,8 +31,8 @@
         <Filename Value="uCustomResourceHandler.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="1"/>
-        <CursorPos X="29" Y="10"/>
-        <UsageCount Value="23"/>
+        <CursorPos Y="9"/>
+        <UsageCount Value="25"/>
         <Loaded Value="True"/>
       </Unit2>
       <Unit3>
@@ -50,7 +50,7 @@
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit4>
     </Units>
-    <JumpHistory Count="13" HistoryIndex="12">
+    <JumpHistory Count="19" HistoryIndex="18">
       <Position1>
         <Filename Value="uMainForm.pas"/>
         <Caret Line="32" Column="25" TopLine="7"/>
@@ -103,6 +103,30 @@
         <Filename Value="uMainForm.pas"/>
         <Caret Line="144" Column="5" TopLine="140"/>
       </Position13>
+      <Position14>
+        <Filename Value="uMainForm.pas"/>
+        <Caret Line="156" Column="35" TopLine="142"/>
+      </Position14>
+      <Position15>
+        <Filename Value="uMainForm.pas"/>
+        <Caret Line="157" TopLine="142"/>
+      </Position15>
+      <Position16>
+        <Filename Value="uMainForm.pas"/>
+        <Caret Line="148" Column="32" TopLine="142"/>
+      </Position16>
+      <Position17>
+        <Filename Value="uMainForm.pas"/>
+        <Caret Line="156" Column="14" TopLine="140"/>
+      </Position17>
+      <Position18>
+        <Filename Value="crbrowser.lpr"/>
+        <Caret Line="37" TopLine="3"/>
+      </Position18>
+      <Position19>
+        <Filename Value="uMainForm.pas"/>
+        <Caret Line="160" Column="24" TopLine="137"/>
+      </Position19>
     </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>

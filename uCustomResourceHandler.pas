@@ -1,6 +1,6 @@
 unit uCustomResourceHandler;
 
-{$I C:\Users\panju\Documents\Lazarus\CEF4Delphi\source\cef.inc}
+{$I cef.inc}
 
 interface
 uses
