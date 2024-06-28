@@ -8,7 +8,6 @@
       <Unit0>
         <Filename Value="crbrowser.lpr"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <TopLine Value="3"/>
         <CursorPos X="22" Y="36"/>
         <UsageCount Value="23"/>
@@ -20,8 +19,9 @@
         <ComponentName Value="MainForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="53"/>
+        <TopLine Value="138"/>
         <CursorPos X="5" Y="144"/>
         <UsageCount Value="23"/>
         <Loaded Value="True"/>
