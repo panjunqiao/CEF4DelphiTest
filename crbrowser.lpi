@@ -35,7 +35,7 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="3">
+    <Units Count="6">
       <Unit0>
         <Filename Value="crbrowser.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -51,6 +51,19 @@
         <Filename Value="uCustomResourceHandler.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit2>
+      <Unit3>
+        <Filename Value="secure\encrydecrytool.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="EncryDecryTool"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="secure\PJQ.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="secure\Base64.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit5>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -61,6 +74,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
+      <OtherUnitFiles Value="secure"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Parsing>

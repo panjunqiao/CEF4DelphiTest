@@ -13,7 +13,7 @@ uses
   Controls, Forms, Dialogs, StdCtrls, ExtCtrls,
   {$ENDIF}
   uCEFChromium, uCEFWindowParent, uCEFChromiumWindow, uCEFInterfaces, uCustomResourceHandler,
-  uCEFConstants, uCEFTypes;
+  uCEFConstants, uCEFTypes,EncryDecryTool,PjQ;
 
 type
 
@@ -62,7 +62,35 @@ implementation
 
 uses
   uCEFMiscFunctions, uCEFApplication;
-
+{$region '解密'}
+function DecryFile(FileStream:TFileStream):TStream;
+var
+  //FileStream: TFileStream;
+  key:AnsiString;
+  stream:TStream;
+  buff:Array[0..7] of Byte;
+  i:integer;
+begin
+    //FileStream := TFileStream.Create(inputfile, fmOpenread or fmShareDenyRead);
+    FileStream.Position:=0;
+    FileStream.Read(buff[0],8);
+    SetLength(key, 8);
+    Move(buff[0], key[1], 8);
+    stream:=TMemoryStream.Create;
+    stream.CopyFrom(FileStream,FileStream.Size-8);
+    stream:=DecryStream(Stream,key);
+    FileStream.Free;
+    Result := stream;
+    {outFileStream:=TFileStream.Create(outfile,fmCreate);
+    outFileStream.Position:=0;
+    stream.Position:=0;
+    //outFileStream.write(KeyBytes, Length(KeyBytes));
+    outFileStream.CopyFrom(stream,stream.Size);
+    //ShowMessage(inttostr(i));
+    stream.Free;
+    outFileStream.Free;}
+end;
+{$endregion}
 // Destruction steps
 // =================
 // 1. The FormCloseQuery event sets CanClose to False and calls TChromiumWindow.CloseBrowser, which triggers the TChromiumWindow.OnClose event.
@@ -137,6 +165,7 @@ var
   TempStream : TStringStream;
   url:string;
   FileStream:TFileStream;
+  stream:TStream;
   p: Integer;
 begin
   // This event is called from the IO thread. Use mutexes if necessary.
@@ -160,7 +189,8 @@ begin
       //ShowMessage(url);
       OutputDebugString(PChar(url));
       FileStream:=TFileStream.Create(GetCurrentDir +url, fmOpenread);
-      Result     := TCustomResourceHandler.Create(browser, frame, '', request, TStream(FileStream), CefGetMimeType('html'));
+      stream:=DecryFile(FileStream);
+      Result     := TCustomResourceHandler.Create(browser, frame, '', request, TStream(stream), CefGetMimeType('html'));
     except
       on e : exception do
         if CustomExceptionHandler('TMainForm.Chromium_OnGetResourceHandler', e) then raise;
