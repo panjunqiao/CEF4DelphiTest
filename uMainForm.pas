@@ -14,7 +14,9 @@ uses
   {$ENDIF}
   uCEFChromium, uCEFWindowParent, uCEFChromiumWindow, uCEFInterfaces, uCustomResourceHandler,
   uCEFConstants, uCEFTypes,EncryDecryTool,PjQ;
-
+const
+  MINIBROWSER_SHOWDEVTOOLS     = WM_APP + $101;
+  MINIBROWSER_HIDEDEVTOOLS     = WM_APP + $102;
 type
 
   { TMainForm }
@@ -25,7 +27,7 @@ type
     Edit1: TEdit;
     Button1: TButton;
     Timer1: TTimer;
-
+    ApplicationEvents1: TApplicationProperties;
     procedure FormShow(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
@@ -46,7 +48,15 @@ type
     procedure Chromium_OnAfterCreated(Sender: TObject);
     procedure Chromium_OnGetResourceHandler(Sender: TObject; const browser: ICefBrowser; const frame: ICefFrame; const request: ICefRequest; var Result: ICefResourceHandler);
     procedure Chromium_OnBeforePopup(Sender: TObject; const browser: ICefBrowser; const frame: ICefFrame; const targetUrl, targetFrameName: ustring; targetDisposition: TCefWindowOpenDisposition; userGesture: Boolean; const popupFeatures: TCefPopupFeatures; var windowInfo: TCefWindowInfo; var client: ICefClient; var settings: TCefBrowserSettings; var extra_info: ICefDictionaryValue; var noJavascriptAccess: Boolean; var Result: Boolean);
-
+    {function Chromium_OnKeyEvent(browser: ICefBrowser; event: PCefKeyEvent;
+                        eventType: TCefKeyEventType; modifiers: TCefEventFlags;
+                        isSystemKey: Boolean; out result: Boolean): HRESULT; stdcall;}
+    procedure ShowDevToolsMsg(var aMessage : TMessage); message MINIBROWSER_SHOWDEVTOOLS;
+    procedure HideDevToolsMsg(var aMessage : TMessage); message MINIBROWSER_HIDEDEVTOOLS;
+    procedure ApplicationEvents1Message(var Msg: tagMSG;
+      var Handled: Boolean);
+    procedure HandleKeyDown(const aMsg : TMsg; var aHandled : boolean);
+    procedure HandleKeyUp(const aMsg : TMsg; var aHandled : boolean);
   public
     { Public declarations }
   end;
@@ -61,7 +71,7 @@ implementation
 {$R *.lfm}
 
 uses
-  uCEFMiscFunctions, uCEFApplication;
+  uCEFv8Value, uMyV8Accessor,uMyV8Handler,uCEFMiscFunctions, uCEFApplication;
 {$region '解密'}
 function DecryFile(FileStream:TFileStream):TStream;
 var
@@ -97,9 +107,28 @@ end;
 // 2. The TChromiumWindow.OnClose event calls TChromiumWindow.DestroyChildWindow which triggers the TChromiumWindow.OnBeforeClose event.
 // 3. TChromiumWindow.OnBeforeClose sets FCanClose := True and sends WM_CLOSE to the form.
 
+procedure GlobalCEFApp_OnContextCreated(const browser: ICefBrowser; const frame: ICefFrame; const context: ICefv8Context);
+var
+  TempAccessor : ICefV8Accessor;
+  TempObject   : ICefv8Value;
+begin
+  // This is the first JS Window Binding example in the "JavaScript Integration" wiki page at
+  // https://bitbucket.org/chromiumembedded/cef/wiki/JavaScriptIntegration.md
+
+  TempAccessor := TMyV8Accessor.Create;
+  TempObject   := TCefv8ValueRef.NewObject(TempAccessor, nil);
+  TempObject.SetValueByKey('myval', TCefv8ValueRef.NewString('My Value!'), V8_PROPERTY_ATTRIBUTE_NONE);
+
+  TempHandler  := TMyV8Handler.Create;
+  TempFunction := TCefv8ValueRef.NewFunction('myfunc', TempHandler);
+
+  context.Global.SetValueByKey('myobj', TempObject, V8_PROPERTY_ATTRIBUTE_NONE);
+end;
+
 procedure CreateGlobalCEFApp;
 begin
-  GlobalCEFApp                  := TCefApplication.Create;     
+  GlobalCEFApp                  := TCefApplication.Create;
+  GlobalCEFApp.OnContextCreated := GlobalCEFApp_OnContextCreated;
   GlobalCEFApp.SetCurrentDir    := True;
   //GlobalCEFApp.LogFile          := 'cef.log';
   //GlobalCEFApp.LogSeverity      := LOGSEVERITY_VERBOSE;
@@ -128,6 +157,8 @@ begin
   ChromiumWindow1.OnAfterCreated                       := Chromium_OnAfterCreated;
   ChromiumWindow1.ChromiumBrowser.OnGetResourceHandler := Chromium_OnGetResourceHandler;
   ChromiumWindow1.ChromiumBrowser.OnBeforePopup        := Chromium_OnBeforePopup;
+  //ChromiumWindow1.ChromiumBrowser.OnKeyEvent           := Chromium_OnKeyEvent;
+  //ChromiumWindow1.ChromiumBrowser.
   ChromiumWindow1.CreateBrowser
   // GlobalCEFApp.GlobalContextInitialized has to be TRUE before creating any browser
   // If it's not initialized yet, we use a simple timer to create the browser later.
@@ -154,6 +185,8 @@ procedure TMainForm.Chromium_OnAfterCreated(Sender: TObject);
 begin
   //ChromiumWindow1.UpdateSize;
   ChromiumWindow1.LoadURL('http://localhost/');
+  //tempPoint:=TPoint.Create(0,0);
+  PostMessage(Handle, MINIBROWSER_SHOWDEVTOOLS, 0, 0);
 end;
 
 procedure TMainForm.Chromium_OnGetResourceHandler(Sender : TObject;
@@ -173,6 +206,14 @@ begin
   Result     := nil;
   //MessageDlg(request.Url, mtConfirmation, mbYesNo, 0);
   url:= StringReplace(request.Url,'http://localhost/','',[]);
+  //OutputDebugString(PChar(url));
+  p:=Pos('devtools://',url);
+  if p>0 then
+    begin
+      Result:=nil;
+      exit;
+    end;
+
   if url='' then
     begin
       url:='\dist\index.html';
@@ -189,7 +230,9 @@ begin
       //ShowMessage(url);
       OutputDebugString(PChar(url));
       FileStream:=TFileStream.Create(GetCurrentDir +url, fmOpenread);
-      stream:=DecryFile(FileStream);
+      //stream:=DecryFile(FileStream);
+      stream:=TMemoryStream.Create;
+      stream.CopyFrom(FileStream,FileStream.Size);
       Result     := TCustomResourceHandler.Create(browser, frame, '', request, TStream(stream), CefGetMimeType('html'));
     except
       on e : exception do
@@ -248,5 +291,75 @@ begin
 
   if (aMessage.wParam = 0) and (GlobalCEFApp <> nil) then GlobalCEFApp.OsmodalLoop := False;
 end;
+
+{function Chromium_OnKeyEvent(browser: ICefBrowser; event: PCefKeyEvent;
+                        eventType: TCefKeyEventType; modifiers: TCefEventFlags;
+                        isSystemKey: Boolean; out result: Boolean): HRESULT; stdcall;
+begin
+  //event.type
+  //OutputDebugString(PChar(event.windows_key_code));
+end;}
+
+procedure TMainForm.ApplicationEvents1Message(var Msg: tagMSG;
+  var Handled: Boolean);
+begin
+  case Msg.message of
+    WM_KEYUP   : HandleKeyUp(Msg, Handled);
+    WM_KEYDOWN : HandleKeyDown(Msg, Handled);
+  end;
+end;
+
+procedure TMainForm.HandleKeyDown(const aMsg : TMsg; var aHandled : boolean);
+var
+  TempMessage : TMessage;
+  TempKeyMsg  : TWMKey;
+begin
+  TempMessage.Msg     := aMsg.message;
+  TempMessage.wParam  := aMsg.wParam;
+  TempMessage.lParam  := aMsg.lParam;
+  TempKeyMsg          := TWMKey(TempMessage);
+
+  if (TempKeyMsg.CharCode = VK_F12) then aHandled := True;
+end;
+
+procedure TMainForm.HandleKeyUp(const aMsg : TMsg; var aHandled : boolean);
+var
+  TempMessage : TMessage;
+  TempKeyMsg  : TWMKey;
+begin
+  TempMessage.Msg     := aMsg.message;
+  TempMessage.wParam  := aMsg.wParam;
+  TempMessage.lParam  := aMsg.lParam;
+  TempKeyMsg          := TWMKey(TempMessage);
+
+  if (TempKeyMsg.CharCode = VK_F12) then
+    begin
+      aHandled := True;
+      PostMessage(Handle, MINIBROWSER_SHOWDEVTOOLS, 0, 0);
+      {if DevTools.Visible then
+        PostMessage(Handle, MINIBROWSER_HIDEDEVTOOLS, 0, 0)
+       else
+        PostMessage(Handle, MINIBROWSER_SHOWDEVTOOLS, 0, 0);}
+    end;
+end;
+
+{$region '显示DevTools，消息执行'}
+procedure TMainForm.ShowDevToolsMsg(var aMessage : TMessage);
+var
+  TempPoint : TPoint;
+begin
+  TempPoint.x := (aMessage.wParam shr 16) and $FFFF;
+  TempPoint.y := aMessage.wParam and $FFFF;
+  ChromiumWindow1.ChromiumBrowser.ShowDevTools(tempPoint);
+end;
+{$endregion}
+
+{$region '隐藏DevTools，消息执行'}
+procedure TMainForm.HideDevToolsMsg(var aMessage : TMessage);
+begin
+  //HideDevTools;
+  ChromiumWindow1.SetFocus;
+end;
+{$endregion}
 
 end.
