@@ -194,6 +194,8 @@ begin
 end;
 
 procedure TMainForm.Chromium_OnAfterCreated(Sender: TObject);
+var
+  TempPoint : TPoint;
 begin
   //ChromiumWindow1.UpdateSize;
   ChromiumWindow1.LoadURL('http://localhost/');

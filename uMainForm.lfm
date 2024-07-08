@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 550
+  Left = 64
   Height = 659
-  Top = 238
+  Top = 289
   Width = 781
   Align = alClient
   Caption = 'Custom Resource Browser'
