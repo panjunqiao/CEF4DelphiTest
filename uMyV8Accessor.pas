@@ -25,13 +25,15 @@ function TMyV8Accessor.Get(const name      : ustring;
                            var   retval    : ICefv8Value;
                            var   exception : ustring): Boolean;
 begin
-  if (name = 'myval') then
+  {if (name = 'myval') then
     begin
       retval := TCefv8ValueRef.NewString(FMyVal);
       Result := True;
     end
    else
-    Result := False;
+    Result := False;}
+   retval := TCefv8ValueRef.NewString(FMyVal);
+   Result := True;
 end;
 
 function TMyV8Accessor.Set_(const name      : ustring;
@@ -39,7 +41,7 @@ function TMyV8Accessor.Set_(const name      : ustring;
                             const value     : ICefv8Value;
                             var   exception : ustring): Boolean;
 begin
-  if (name = 'myval') then
+  {if (name = 'myval') then
     begin
       if value.IsString then
         FMyVal := value.GetStringValue
@@ -49,7 +51,9 @@ begin
       Result := True;
     end
    else
-    Result := False;
+    Result := False;}
+   FMyVal := value.GetStringValue;
+   Result := True;
 end;
 
 end.

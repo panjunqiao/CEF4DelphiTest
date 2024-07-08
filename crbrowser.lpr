@@ -12,7 +12,8 @@ uses
   {$ENDIF }
   uCEFApplication,
   uMainForm in 'uMainForm.pas' {MainForm},
-  uCustomResourceHandler in 'uCustomResourceHandler.pas';
+  uCustomResourceHandler in 'uCustomResourceHandler.pas',
+  tools in 'utils/tools.pas';
 
 //{$R *.res}
 
@@ -31,6 +32,7 @@ begin
       {$ENDIF}
       Application.CreateForm(TMainForm, MainForm);
       Application.Run;
+      app:=Application;
     end;
 
   DestroyGlobalCEFApp;

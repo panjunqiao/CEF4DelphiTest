@@ -12,11 +12,12 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics,
   Controls, Forms, Dialogs, StdCtrls, ExtCtrls,
   {$ENDIF}
-  uCEFChromium, uCEFWindowParent, uCEFChromiumWindow, uCEFInterfaces, uCustomResourceHandler,
-  uCEFConstants, uCEFTypes,EncryDecryTool,PjQ;
+  uCEFChromium, uCEFChromiumWindow, uCEFInterfaces, uCustomResourceHandler,
+  uCEFConstants, uCEFTypes,EncryDecryTool,PjQ,tools;
 const
   MINIBROWSER_SHOWDEVTOOLS     = WM_APP + $101;
   MINIBROWSER_HIDEDEVTOOLS     = WM_APP + $102;
+  APPLICATION_TERMINATE        = WM_APP + $103;
 type
 
   { TMainForm }
@@ -72,6 +73,7 @@ implementation
 
 uses
   uCEFv8Value, uMyV8Accessor,uMyV8Handler,uCEFMiscFunctions, uCEFApplication;
+
 {$region '解密'}
 function DecryFile(FileStream:TFileStream):TStream;
 var
@@ -111,18 +113,28 @@ procedure GlobalCEFApp_OnContextCreated(const browser: ICefBrowser; const frame:
 var
   TempAccessor : ICefV8Accessor;
   TempObject   : ICefv8Value;
+
+  TempHandler  : ICefv8Handler;
+  TempFunction : ICefv8Value;
 begin
   // This is the first JS Window Binding example in the "JavaScript Integration" wiki page at
   // https://bitbucket.org/chromiumembedded/cef/wiki/JavaScriptIntegration.md
 
   TempAccessor := TMyV8Accessor.Create;
   TempObject   := TCefv8ValueRef.NewObject(TempAccessor, nil);
-  TempObject.SetValueByKey('myval', TCefv8ValueRef.NewString('My Value!'), V8_PROPERTY_ATTRIBUTE_NONE);
+  TempObject.SetValueByKey('MACAdress', TCefv8ValueRef.NewString(getMACAdress), V8_PROPERTY_ATTRIBUTE_NONE);
+  TempObject.SetValueByKey('version', TCefv8ValueRef.NewString('1'), V8_PROPERTY_ATTRIBUTE_NONE);
 
   TempHandler  := TMyV8Handler.Create;
-  TempFunction := TCefv8ValueRef.NewFunction('myfunc', TempHandler);
+  TempFunction := TCefv8ValueRef.NewFunction('getMACAdress', TempHandler);
+  TempObject.SetValueByKey('getMACAdress', TempFunction, V8_PROPERTY_ATTRIBUTE_NONE);
 
-  context.Global.SetValueByKey('myobj', TempObject, V8_PROPERTY_ATTRIBUTE_NONE);
+  TempHandler  := TMyV8Handler.Create;
+  TempFunction := TCefv8ValueRef.NewFunction('exit', TempHandler);
+  TempObject.SetValueByKey('exit', TempFunction, V8_PROPERTY_ATTRIBUTE_NONE);
+
+  context.Global.SetValueByKey('CEFObject', TempObject, V8_PROPERTY_ATTRIBUTE_NONE);
+  //context.Global.SetValueByKey('myfunc', TempFunction, V8_PROPERTY_ATTRIBUTE_NONE);
 end;
 
 procedure CreateGlobalCEFApp;
@@ -187,6 +199,7 @@ begin
   ChromiumWindow1.LoadURL('http://localhost/');
   //tempPoint:=TPoint.Create(0,0);
   PostMessage(Handle, MINIBROWSER_SHOWDEVTOOLS, 0, 0);
+  //OutputDebugString(PChar(GetMACAdress));
 end;
 
 procedure TMainForm.Chromium_OnGetResourceHandler(Sender : TObject;
