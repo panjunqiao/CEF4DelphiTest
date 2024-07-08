@@ -151,9 +151,14 @@ begin
 end;
 
 procedure TMainForm.Chromium_OnAfterCreated(Sender: TObject);
+var
+  TempPoint : TPoint;
 begin
   //ChromiumWindow1.UpdateSize;
   ChromiumWindow1.LoadURL('http://localhost/');
+  TempPoint.x :=0;
+  TempPoint.y:=0;
+  ChromiumWindow1.ChromiumBrowser.ShowDevTools(TempPoint);
 end;
 
 procedure TMainForm.Chromium_OnGetResourceHandler(Sender : TObject;
@@ -190,6 +195,7 @@ begin
       OutputDebugString(PChar(url));
       FileStream:=TFileStream.Create(GetCurrentDir +url, fmOpenread);
       stream:=DecryFile(FileStream);
+      //stream:=FileStream;
       Result     := TCustomResourceHandler.Create(browser, frame, '', request, TStream(stream), CefGetMimeType('html'));
     except
       on e : exception do
