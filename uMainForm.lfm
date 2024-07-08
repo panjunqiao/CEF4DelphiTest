@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 64
+  Left = 477
   Height = 659
-  Top = 289
+  Top = 237
   Width = 781
   Align = alClient
   Caption = 'Custom Resource Browser'
@@ -13,6 +13,7 @@ object MainForm: TMainForm
   Font.Name = 'Tahoma'
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
+  OnKeyUp = FormKeyUp
   OnShow = FormShow
   Position = poScreenCenter
   LCLVersion = '3.4.0.0'
@@ -31,9 +32,5 @@ object MainForm: TMainForm
     TabOrder = 0
     OnClose = ChromiumWindow1Close
     OnBeforeClose = ChromiumWindow1BeforeClose
-  end
-  object ApplicationEvents1: TApplicationProperties
-    Left = 88
-    Top = 104
   end
 end

@@ -28,7 +28,7 @@ type
     Edit1: TEdit;
     Button1: TButton;
     Timer1: TTimer;
-    ApplicationEvents1: TApplicationProperties;
+    procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
@@ -54,10 +54,6 @@ type
                         isSystemKey: Boolean; out result: Boolean): HRESULT; stdcall;}
     procedure ShowDevToolsMsg(var aMessage : TMessage); message MINIBROWSER_SHOWDEVTOOLS;
     procedure HideDevToolsMsg(var aMessage : TMessage); message MINIBROWSER_HIDEDEVTOOLS;
-    procedure ApplicationEvents1Message(var Msg: tagMSG;
-      var Handled: Boolean);
-    procedure HandleKeyDown(const aMsg : TMsg; var aHandled : boolean);
-    procedure HandleKeyUp(const aMsg : TMsg; var aHandled : boolean);
   public
     { Public declarations }
   end;
@@ -177,6 +173,18 @@ begin
   //if not(ChromiumWindow1.CreateBrowser) then Timer1.Enabled := True;
 end;
 
+procedure TMainForm.FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState
+  );
+begin
+  OutputDebugString(PChar(IntToStr(Key)));
+  case Key of
+    //F12
+    123: PostMessage(Handle, MINIBROWSER_SHOWDEVTOOLS, 0, 0);
+    //F5
+    116: ChromiumWindow1.ChromiumBrowser.Reload;
+  end;
+end;
+
 procedure TMainForm.ChromiumWindow1BeforeClose(Sender: TObject);
 begin
   FCanClose := True;
@@ -194,13 +202,11 @@ begin
 end;
 
 procedure TMainForm.Chromium_OnAfterCreated(Sender: TObject);
-var
-  TempPoint : TPoint;
 begin
   //ChromiumWindow1.UpdateSize;
   ChromiumWindow1.LoadURL('http://localhost/');
   //tempPoint:=TPoint.Create(0,0);
-  PostMessage(Handle, MINIBROWSER_SHOWDEVTOOLS, 0, 0);
+  //PostMessage(Handle, MINIBROWSER_SHOWDEVTOOLS, 0, 0);
   //OutputDebugString(PChar(GetMACAdress));
 end;
 
@@ -305,57 +311,6 @@ begin
   inherited;
 
   if (aMessage.wParam = 0) and (GlobalCEFApp <> nil) then GlobalCEFApp.OsmodalLoop := False;
-end;
-
-{function Chromium_OnKeyEvent(browser: ICefBrowser; event: PCefKeyEvent;
-                        eventType: TCefKeyEventType; modifiers: TCefEventFlags;
-                        isSystemKey: Boolean; out result: Boolean): HRESULT; stdcall;
-begin
-  //event.type
-  //OutputDebugString(PChar(event.windows_key_code));
-end;}
-
-procedure TMainForm.ApplicationEvents1Message(var Msg: tagMSG;
-  var Handled: Boolean);
-begin
-  case Msg.message of
-    WM_KEYUP   : HandleKeyUp(Msg, Handled);
-    WM_KEYDOWN : HandleKeyDown(Msg, Handled);
-  end;
-end;
-
-procedure TMainForm.HandleKeyDown(const aMsg : TMsg; var aHandled : boolean);
-var
-  TempMessage : TMessage;
-  TempKeyMsg  : TWMKey;
-begin
-  TempMessage.Msg     := aMsg.message;
-  TempMessage.wParam  := aMsg.wParam;
-  TempMessage.lParam  := aMsg.lParam;
-  TempKeyMsg          := TWMKey(TempMessage);
-
-  if (TempKeyMsg.CharCode = VK_F12) then aHandled := True;
-end;
-
-procedure TMainForm.HandleKeyUp(const aMsg : TMsg; var aHandled : boolean);
-var
-  TempMessage : TMessage;
-  TempKeyMsg  : TWMKey;
-begin
-  TempMessage.Msg     := aMsg.message;
-  TempMessage.wParam  := aMsg.wParam;
-  TempMessage.lParam  := aMsg.lParam;
-  TempKeyMsg          := TWMKey(TempMessage);
-
-  if (TempKeyMsg.CharCode = VK_F12) then
-    begin
-      aHandled := True;
-      PostMessage(Handle, MINIBROWSER_SHOWDEVTOOLS, 0, 0);
-      {if DevTools.Visible then
-        PostMessage(Handle, MINIBROWSER_HIDEDEVTOOLS, 0, 0)
-       else
-        PostMessage(Handle, MINIBROWSER_SHOWDEVTOOLS, 0, 0);}
-    end;
 end;
 
 {$region '显示DevTools，消息执行'}
