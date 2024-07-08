@@ -32,4 +32,8 @@ object MainForm: TMainForm
     OnClose = ChromiumWindow1Close
     OnBeforeClose = ChromiumWindow1BeforeClose
   end
+  object ApplicationEvents1: TApplicationProperties
+    Left = 88
+    Top = 104
+  end
 end
