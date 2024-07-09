@@ -35,7 +35,7 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="9">
+    <Units Count="10">
       <Unit0>
         <Filename Value="crbrowser.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -76,6 +76,11 @@
         <Filename Value="utils\tools.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit8>
+      <Unit9>
+        <Filename Value="messageconst.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="MessageConst"/>
+      </Unit9>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

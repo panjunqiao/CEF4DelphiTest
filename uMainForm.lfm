@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 477
+  Left = 898
   Height = 659
-  Top = 237
+  Top = 157
   Width = 781
   Align = alClient
   Caption = 'Custom Resource Browser'
@@ -32,5 +32,10 @@ object MainForm: TMainForm
     TabOrder = 0
     OnClose = ChromiumWindow1Close
     OnBeforeClose = ChromiumWindow1BeforeClose
+  end
+  object Timer1: TTimer
+    OnTimer = Timer1Timer
+    Left = 160
+    Top = 264
   end
 end

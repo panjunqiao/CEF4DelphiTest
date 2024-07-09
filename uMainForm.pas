@@ -34,6 +34,7 @@ type
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure ChromiumWindow1Close(Sender: TObject);
     procedure ChromiumWindow1BeforeClose(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
 
   private
     procedure WMMove(var aMessage : TWMMove); message WM_MOVE;
@@ -54,6 +55,7 @@ type
                         isSystemKey: Boolean; out result: Boolean): HRESULT; stdcall;}
     procedure ShowDevToolsMsg(var aMessage : TMessage); message MINIBROWSER_SHOWDEVTOOLS;
     procedure HideDevToolsMsg(var aMessage : TMessage); message MINIBROWSER_HIDEDEVTOOLS;
+    procedure ApplicationExit(var aMessage : TMessage); message APPLICATION_TERMINATE;
   public
     { Public declarations }
   end;
@@ -121,9 +123,9 @@ begin
   TempObject.SetValueByKey('MACAdress', TCefv8ValueRef.NewString(getMACAdress), V8_PROPERTY_ATTRIBUTE_NONE);
   TempObject.SetValueByKey('version', TCefv8ValueRef.NewString('1'), V8_PROPERTY_ATTRIBUTE_NONE);
 
-  TempHandler  := TMyV8Handler.Create;
+  {TempHandler  := TMyV8Handler.Create;
   TempFunction := TCefv8ValueRef.NewFunction('getMACAdress', TempHandler);
-  TempObject.SetValueByKey('getMACAdress', TempFunction, V8_PROPERTY_ATTRIBUTE_NONE);
+  TempObject.SetValueByKey('getMACAdress', TempFunction, V8_PROPERTY_ATTRIBUTE_NONE);}
 
   TempHandler  := TMyV8Handler.Create;
   TempFunction := TCefv8ValueRef.NewFunction('exit', TempHandler);
@@ -167,10 +169,10 @@ begin
   ChromiumWindow1.ChromiumBrowser.OnBeforePopup        := Chromium_OnBeforePopup;
   //ChromiumWindow1.ChromiumBrowser.OnKeyEvent           := Chromium_OnKeyEvent;
   //ChromiumWindow1.ChromiumBrowser.
-  ChromiumWindow1.CreateBrowser
+  //ChromiumWindow1.CreateBrowser
   // GlobalCEFApp.GlobalContextInitialized has to be TRUE before creating any browser
   // If it's not initialized yet, we use a simple timer to create the browser later.
-  //if not(ChromiumWindow1.CreateBrowser) then Timer1.Enabled := True;
+  if not(ChromiumWindow1.CreateBrowser) then Timer1.Enabled := True;
 end;
 
 procedure TMainForm.FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState
@@ -191,6 +193,13 @@ begin
   PostMessage(Handle, WM_CLOSE, 0, 0);
 end;
 
+procedure TMainForm.Timer1Timer(Sender: TObject);
+begin
+  Timer1.Enabled := False;
+  if not(ChromiumWindow1.CreateBrowser) and not(ChromiumWindow1.Initialized) then
+    Timer1.Enabled := True;
+end;
+
 procedure TMainForm.ChromiumWindow1Close(Sender: TObject);
 begin
   // DestroyChildWindow will destroy the child window created by CEF at the top of the Z order.
@@ -203,11 +212,11 @@ end;
 
 procedure TMainForm.Chromium_OnAfterCreated(Sender: TObject);
 begin
+  OutputDebugString(PChar('Chromium_OnAfterCreated'));
   //ChromiumWindow1.UpdateSize;
   ChromiumWindow1.LoadURL('http://localhost/');
   //tempPoint:=TPoint.Create(0,0);
-  //PostMessage(Handle, MINIBROWSER_SHOWDEVTOOLS, 0, 0);
-  //OutputDebugString(PChar(GetMACAdress));
+  PostMessage(Handle, MINIBROWSER_SHOWDEVTOOLS, 0, 0);
 end;
 
 procedure TMainForm.Chromium_OnGetResourceHandler(Sender : TObject;
@@ -331,5 +340,11 @@ begin
   ChromiumWindow1.SetFocus;
 end;
 {$endregion}
+
+procedure TMainForm.ApplicationExit(var aMessage : TMessage);
+begin
+  OutputDebugString(PChar('TMainForm.ApplicationExit'));
+  Application.Terminate;
+end;
 
 end.

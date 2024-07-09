@@ -7,7 +7,8 @@
 interface
 
 uses
-  Windows,uCEFTypes, uCEFInterfaces, uCEFv8Value, uCEFv8Handler,Classes,tools;
+  Windows,uCEFTypes, uCEFInterfaces, uCEFv8Value, uCEFv8Handler,Classes,tools,
+  uMainForm;
 var
   CommandList:TStringList;
 type
@@ -31,17 +32,18 @@ begin
     end
    else
     Result := False;}
+  OutputDebugString(PChar(name));
   case CommandList.IndexOf(name) of
     //exit
     0:
       begin
-        app.Terminate;
+        PostMessage(MainForm.Handle, APPLICATION_TERMINATE, 0, 0);
+        //app.Terminate;
         //retval := TCefv8ValueRef.NewString('Application.exit');
         Result := False;
       end;
     1:begin
       //getMACAdress
-      //OutputDebugString(PChar(name));
       retval := TCefv8ValueRef.NewString(GetMACAdress);
       Result := True;
     end

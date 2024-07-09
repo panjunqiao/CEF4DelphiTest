@@ -13,7 +13,8 @@ uses
   uCEFApplication,
   uMainForm in 'uMainForm.pas' {MainForm},
   uCustomResourceHandler in 'uCustomResourceHandler.pas',
-  tools in 'utils/tools.pas';
+  tools in 'utils/tools.pas',
+  MessageConst in 'messageconst.pas';
 
 //{$R *.res}
 
