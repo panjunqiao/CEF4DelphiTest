@@ -25,21 +25,12 @@ function TMyV8Handler.Execute(const name      : ustring;
                               var   retval    : ICefv8Value;
                               var   exception : ustring): Boolean;
 begin
-  {if (name = 'myfunc') then
-    begin
-      retval := TCefv8ValueRef.NewString('My Function Value!');
-      Result := True;
-    end
-   else
-    Result := False;}
   OutputDebugString(PChar(name));
   case CommandList.IndexOf(name) of
     //exit
     0:
       begin
         PostMessage(MainForm.Handle, APPLICATION_TERMINATE, 0, 0);
-        //app.Terminate;
-        //retval := TCefv8ValueRef.NewString('Application.exit');
         Result := False;
       end;
     1:begin

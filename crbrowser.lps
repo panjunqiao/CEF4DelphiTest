@@ -9,7 +9,7 @@
         <Filename Value="crbrowser.lpr"/>
         <IsPartOfProject Value="True"/>
         <CursorPos Y="40"/>
-        <UsageCount Value="67"/>
+        <UsageCount Value="68"/>
         <Loaded Value="True"/>
       </Unit0>
       <Unit1>
@@ -18,11 +18,10 @@
         <ComponentName Value="MainForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="32"/>
-        <CursorPos X="113" Y="52"/>
-        <UsageCount Value="67"/>
+        <TopLine Value="300"/>
+        <CursorPos X="41" Y="135"/>
+        <UsageCount Value="68"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit1>
@@ -31,7 +30,7 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="1"/>
         <CursorPos X="29" Y="25"/>
-        <UsageCount Value="67"/>
+        <UsageCount Value="68"/>
         <Loaded Value="True"/>
       </Unit2>
       <Unit3>
@@ -40,14 +39,14 @@
         <UnitName Value="EncryDecryTool"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="24" Y="8"/>
-        <UsageCount Value="61"/>
+        <UsageCount Value="62"/>
       </Unit3>
       <Unit4>
         <Filename Value="secure\PJQ.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="10" Y="11"/>
-        <UsageCount Value="61"/>
+        <UsageCount Value="62"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit4>
       <Unit5>
@@ -57,7 +56,7 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="61"/>
+        <UsageCount Value="62"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit5>
       <Unit6>
@@ -66,16 +65,17 @@
         <EditorIndex Value="6"/>
         <TopLine Value="16"/>
         <CursorPos X="19" Y="56"/>
-        <UsageCount Value="49"/>
+        <UsageCount Value="50"/>
         <Loaded Value="True"/>
       </Unit6>
       <Unit7>
         <Filename Value="uMyV8Handler.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="5"/>
-        <TopLine Value="7"/>
-        <CursorPos X="25" Y="43"/>
-        <UsageCount Value="43"/>
+        <TopLine Value="13"/>
+        <CursorPos X="67" Y="33"/>
+        <UsageCount Value="44"/>
         <Loaded Value="True"/>
       </Unit7>
       <Unit8>
@@ -83,7 +83,7 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="4"/>
         <CursorPos X="54" Y="8"/>
-        <UsageCount Value="29"/>
+        <UsageCount Value="30"/>
         <Loaded Value="True"/>
       </Unit8>
       <Unit9>
@@ -92,7 +92,7 @@
         <UnitName Value="MessageConst"/>
         <EditorIndex Value="3"/>
         <CursorPos Y="9"/>
-        <UsageCount Value="22"/>
+        <UsageCount Value="23"/>
         <Loaded Value="True"/>
       </Unit9>
       <Unit10>

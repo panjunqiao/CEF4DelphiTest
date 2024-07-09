@@ -1,4 +1,5 @@
-bin/
+bin/locales/
+bin/**.*
 backup/
 lib/
-!bin/dist
+!bin/dist/

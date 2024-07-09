@@ -115,24 +115,17 @@ var
   TempHandler  : ICefv8Handler;
   TempFunction : ICefv8Value;
 begin
-  // This is the first JS Window Binding example in the "JavaScript Integration" wiki page at
-  // https://bitbucket.org/chromiumembedded/cef/wiki/JavaScriptIntegration.md
 
   TempAccessor := TMyV8Accessor.Create;
   TempObject   := TCefv8ValueRef.NewObject(TempAccessor, nil);
   TempObject.SetValueByKey('MACAdress', TCefv8ValueRef.NewString(getMACAdress), V8_PROPERTY_ATTRIBUTE_NONE);
   TempObject.SetValueByKey('version', TCefv8ValueRef.NewString('1'), V8_PROPERTY_ATTRIBUTE_NONE);
 
-  {TempHandler  := TMyV8Handler.Create;
-  TempFunction := TCefv8ValueRef.NewFunction('getMACAdress', TempHandler);
-  TempObject.SetValueByKey('getMACAdress', TempFunction, V8_PROPERTY_ATTRIBUTE_NONE);}
-
   TempHandler  := TMyV8Handler.Create;
   TempFunction := TCefv8ValueRef.NewFunction('exit', TempHandler);
   TempObject.SetValueByKey('exit', TempFunction, V8_PROPERTY_ATTRIBUTE_NONE);
 
   context.Global.SetValueByKey('CEFObject', TempObject, V8_PROPERTY_ATTRIBUTE_NONE);
-  //context.Global.SetValueByKey('myfunc', TempFunction, V8_PROPERTY_ATTRIBUTE_NONE);
 end;
 
 procedure CreateGlobalCEFApp;
@@ -140,8 +133,6 @@ begin
   GlobalCEFApp                  := TCefApplication.Create;
   GlobalCEFApp.OnContextCreated := GlobalCEFApp_OnContextCreated;
   GlobalCEFApp.SetCurrentDir    := True;
-  //GlobalCEFApp.LogFile          := 'cef.log';
-  //GlobalCEFApp.LogSeverity      := LOGSEVERITY_VERBOSE;
 end;
 
 procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: Boolean);

@@ -1,0 +1,19 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        const init=()=>{
+            console.log(window.CEFObject)
+        }
+        const exit=()=>{
+            const value=window.CEFObject.exit()
+            console.log(value)
+        }
+    </script>
+</head>
+<body onload="init()">
+    <button onclick="exit();">退出</button>
+</body>
+</html>
